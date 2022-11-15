@@ -29,13 +29,13 @@ module.exports.getByIdProduct = async (req, res, next) => {
 module.exports.create = async (req, res, next) => {
   try {
     const newProduct = new productsModel(req.body);
-    const savedBook = await newProduct.save();
+    const savedProduct = await newProduct.save();
     if (req.body.idCatalog) {
       const catalog = catalogsModel.findById(req.body.idCatalog);
-      await catalog.updateOne({ $push: { products: savedBook._id } });
+      await catalog.updateOne({ $push: { products: savedProduct._id } });
       res
         .status(200)
-        .json({ code: "200", message: "Success", data: savedBook });
+        .json({ code: "200", message: "Success", data: savedProduct });
     }
   } catch (error) {
     res.status(500).json({ error: error });

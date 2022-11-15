@@ -14,7 +14,7 @@ module.exports.getAll = async (req, res) => {
   }
 };
 
-module.exports.getByIdCata = async (req, res, next) => {
+module.exports.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
     const Catalogs = await catalogsModel.findById(id).populate("products");
