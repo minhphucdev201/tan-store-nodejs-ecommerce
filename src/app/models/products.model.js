@@ -1,9 +1,7 @@
+// TẠO SCHEMA PRODUCT TRONG MONGODB
 const mongoose = require("mongoose");
-
 const slug = require("mongoose-slug-generator");
-
 mongoose.plugin(slug);
-
 const ProductSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },

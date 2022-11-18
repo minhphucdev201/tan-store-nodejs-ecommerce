@@ -1,8 +1,10 @@
 const usersModel = require("../models/users.model");
+const usersService = require("../services/users.service");
+const rolesService = require("../services/roles.service");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// Get all user
 let refreshTokens = [];
+// Get all user
 module.exports.getAll = async (req, res) => {
   try {
     const listUser = await usersModel.find();
@@ -40,28 +42,37 @@ module.exports.generateAcessToken = (user) => {
 //  Register User
 exports.Register = async (req, res, next) => {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hash_password = await bcrypt.hash(req.body.password, salt);
-
-    // Create new user
-    const newUser = await new usersModel({
-      fullName: req.body.fullName,
-      email: req.body.email,
-      userName: req.body.userName,
-      password: hash_password,
-    });
-    //save to DB
-    const user = await newUser.save();
+    const values = req.body;
+    // check username
+    const checkUsername = await usersService.getByUserName(values.username);
+    if (checkUsername) {
+      return res
+        .status(404)
+        .json({ code: "404", message: "Username already exists" });
+    }
+    // check IdRole
+    const checkIdRole = await rolesService.getById(values.roleId);
+    if (!checkIdRole) {
+      return res
+        .status(404)
+        .json({ code: "404", message: "IdRole does not exist" });
+    }
+    // add Adimin
+    const addAdmin = usersService.createNew(values);
+    if (addAdmin) {
+      return res
+        .status(200)
+        .json({ code: "200", message: "Add Admin success" });
+    }
     return res
-      .status(200)
-      .json({ code: "200", message: "Create user successfully", user });
+      .status(404)
+      .json({ code: "404", message: "register admin fail" });
   } catch (error) {
     res.status(500).json({ error: error });
   }
 };
 
 // Login User
-
 exports.Login = async (req, res, next) => {
   try {
     const user = await usersModel.findOne({ userName: req.body.userName });
@@ -158,8 +169,7 @@ module.exports.refreshToken = async (req, res) => {
   });
 };
 
-// LOGOUT
-
+// LOGOUT User
 module.exports.Logout = async (req, res) => {
   res.clearCookie("refreshToken");
   refreshTokens = refreshTokens.filter(

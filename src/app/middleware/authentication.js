@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 // verifyToken  and Admin auth
-
 const middlewareAuth = {
   // verifyToken
   checkAuthencation: (req, res, next) => {
