@@ -17,4 +17,6 @@ router.delete(
 );
 // REFRESH
 router.post("/refresh", usersController.refreshToken);
+router.post("/change-password", usersController.changePassword);
+router.post("/forgot-password", usersController.forgotpassword);
 module.exports = router;

@@ -23,6 +23,19 @@ exports.getByUserName = async (Username) => {
   }
 };
 
+// get by email
+exports.getByEmail = async (email) => {
+  try {
+    const user = await usersModel.find({ email: email });
+    if (user.length > 0) {
+      return user;
+    }
+    return false;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.createNew = async (values) => {
   try {
     const bcrypt = require("bcrypt");
@@ -55,4 +68,28 @@ exports.createNew = async (values) => {
     console.log(err);
     return false;
   }
+};
+
+module.exports.changePassword = async (id, values) => {
+  const bcrypt = require("bcrypt");
+  var salt = bcrypt.genSaltSync(10);
+
+  const user = await usersModel.findOne({ _id: id });
+  const password_db = user.password;
+  const password = values.password;
+  const newPass = values.newPassword;
+  const passwordCompared = bcrypt.compareSync(password, password_db);
+
+  if (!passwordCompared) {
+    console.log("wrong password");
+    return false;
+  }
+
+  const passwordHashed = bcrypt.hashSync(newPass, salt);
+  const newPassword = passwordHashed;
+
+  return await usersModel
+    .updateOne({ _id: id }, { password: newPassword })
+    .then(() => true)
+    .catch((error) => false);
 };
