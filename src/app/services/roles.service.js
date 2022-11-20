@@ -1,5 +1,5 @@
 const rolesModel = require("../models/roles.model");
-
+const permissionsModel = require("../models/permissions.model");
 exports.getAll = async () => {
   try {
     const Role = await rolesModel.find();

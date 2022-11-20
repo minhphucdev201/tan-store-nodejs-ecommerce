@@ -93,3 +93,17 @@ module.exports.changePassword = async (id, values) => {
     .then(() => true)
     .catch((error) => false);
 };
+
+module.exports.NewPass = async (id, password) => {
+  console.log(id);
+  const bcrypt = require("bcrypt");
+  var salt = bcrypt.genSaltSync(10);
+  const passwordHashed = bcrypt.hashSync(password, salt);
+  const newPassword = passwordHashed;
+  console.log(newPassword);
+
+  return await usersModel
+    .updateOne({ _id: id }, { password: newPassword })
+    .then(() => true)
+    .catch((error) => false);
+};
