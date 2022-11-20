@@ -80,7 +80,8 @@ exports.update = async (id, values) => {
     .catch((error) => false);
 };
 exports.getPermission = async (roleId) => {
-  const permissions = await rolesModel.findOne({ idPermissions: roleId });
+  console.log(roleId);
+  const permissions = await rolesModel.findOne({ _id: roleId });
   return permissions;
 };
 

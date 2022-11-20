@@ -80,18 +80,19 @@ module.exports.checkRoleDelCata = async (req, res, next) => {
     if (token) {
       const accessToken = token.split(" ")[1];
       const check = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+      console.log("check", check);
       const checkRole = await rolesService.getPermission(check.roleId);
-      console.log("hihi ===>", checkRole);
       const getPermission = checkRole.listPermissions.filter(
         (item) => item.idPermissions == "6377c64a2a18b327a2590b59"
       );
-      console.log(Boolean(getPermission[0].status));
-      if (getPermission[0].status) {
+      console.log(getPermission[0].status);
+      if (!getPermission[0].status) {
+        return res.status(500).json({ code: "500", message: "Failed" });
+      }
+      return next();
+      if (checkRole) {
         return next();
       }
-      // if (checkRole) {
-      //   return next();
-      // }
       return res.json({ status: 403, message: "not authorization" });
     } else {
       return res.status(403).json("not token");

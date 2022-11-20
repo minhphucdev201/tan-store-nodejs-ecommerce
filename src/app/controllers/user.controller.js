@@ -96,8 +96,8 @@ exports.Login = async (req, res, next) => {
     if (user && validPassword) {
       const accessToken = jwt.sign(
         {
-          id: user.id,
-          admin: user.admin,
+          userName: user.userName,
+          roleId: user.roleId,
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "30m" }
