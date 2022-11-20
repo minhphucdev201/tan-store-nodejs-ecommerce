@@ -12,7 +12,7 @@ router.post(
 router.get("/", middlewareAuth.checkAuthencation, usersController.getAll);
 router.delete(
   "/del/:id",
-  middlewareAuth.checkAdmin,
+
   usersController.deleteUser
 );
 // REFRESH

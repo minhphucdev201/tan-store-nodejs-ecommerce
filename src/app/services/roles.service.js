@@ -79,9 +79,8 @@ exports.update = async (id, values) => {
     .then(() => true)
     .catch((error) => false);
 };
-
-exports.getPermission = async (idRole) => {
-  const permissions = await rolesModel.findOne({ _id: idRole });
+exports.getPermission = async (roleId) => {
+  const permissions = await rolesModel.findOne({ idPermissions: roleId });
   return permissions;
 };
 
