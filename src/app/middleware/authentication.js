@@ -87,13 +87,13 @@ module.exports.checkRoleDelCata = async (req, res, next) => {
       );
       console.log(getPermission[0].status);
       if (!getPermission[0].status) {
-        return res.status(500).json({ code: "500", message: "Failed" });
+        return res
+          .status(500)
+          .json({ code: "403", message: "not authorization" });
       }
       return next();
-      if (checkRole) {
-        return next();
-      }
-      return res.json({ status: 403, message: "not authorization" });
+
+      // return res.json({ status: 403, message: "not authorization" });
     } else {
       return res.status(403).json("not token");
     }
