@@ -1,5 +1,5 @@
 const blogsModel = require("../models/blogs.model");
-
+const blogsService = require("../services/blogs.service");
 module.exports.getAll = async (req, res, next) => {
   try {
     const blog = await blogsModel.find();
@@ -55,5 +55,15 @@ module.exports.delete = async (req, res, next) => {
       .json({ code: "200", message: "Success", data: "Deleted Successfully" });
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+};
+
+module.exports.SearchTitle = async (req, res) => {
+  try {
+    const search = req.query.description;
+    const BlogsSearch = await blogsService.SearchTitleBlog(search);
+    return res.status(200).json(BlogsSearch);
+  } catch (error) {
+    return res.status(500).json(error);
   }
 };

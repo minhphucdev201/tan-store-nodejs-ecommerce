@@ -8,4 +8,6 @@ router.get("/:id", blogController.getById);
 router.post("/create", blogController.create);
 router.put("/:id", blogController.update);
 router.delete("/del/:id", blogController.delete);
+
+router.get("/searchTitle", blogController.SearchTitle);
 module.exports = router;

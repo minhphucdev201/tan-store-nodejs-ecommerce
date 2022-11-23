@@ -12,7 +12,10 @@ exports.getSeachCatalog = async (idCatalog) => {
 
 exports.getSearchNameProduct = async (name) => {
   try {
-    var regex = new RegExp(name, "i");
+    const regex = new RegExp(name, "i");
+    if (regex) {
+      console.log("regex ==>", regex);
+    }
     const ProductSearch = await productsModel.find({ name: regex });
     return ProductSearch;
   } catch (error) {
@@ -25,6 +28,18 @@ exports.findBySlug = async (slug) => {
     const Product = await productsModel.find({ slug: slug });
     if (Product.length == 0) return [];
     return Product;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getByIdCata = async (idCata) => {
+  try {
+    const products = await productsModel.find({ idCatalog: idCata });
+    if (products) {
+      return products;
+    }
+    return false;
   } catch (error) {
     console.log(error);
   }

@@ -114,3 +114,20 @@ module.exports.SearchBySlug = async (req, res) => {
     return res.status(500).json(error);
   }
 };
+
+module.exports.getByIdCata = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const Products = await productsService.getByIdCata(id);
+    if (!Products) {
+      return res
+        .status(404)
+        .json({ code: "404", message: "Can't find catalog" });
+    }
+    return res
+      .status(200)
+      .json({ code: "200", message: "Successfully", data: Products });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
