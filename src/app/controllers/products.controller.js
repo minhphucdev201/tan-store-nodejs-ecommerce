@@ -4,10 +4,16 @@ const catalogsModel = require("../models/catalogs.model");
 // GET ALL PRODUCT
 module.exports.getAll = async (req, res, next) => {
   try {
-    const Products = await productsModel.find();
+    const filter = req.query;
+    const Products = await productsService.getAll(filter);
     return res
       .status(200)
-      .json({ code: "200", message: "Success", data: Products });
+      .json({
+        code: "200",
+        message: "sucsses",
+        total: Products.length,
+        data: Products,
+      });
   } catch (error) {
     res.status(500).json({ error: error });
   }

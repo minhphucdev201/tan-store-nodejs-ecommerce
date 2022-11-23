@@ -1,5 +1,27 @@
 const productsModel = require("../models/products.model");
 
+exports.getAll = async (filter) => {
+  try {
+    const { page = 1, limit = 3 } = filter;
+    if (filter.hasOwnProperty("_sort")) {
+      const Product = await productsModel
+        .find(filter)
+        .skip(page > 0 ? (page - 1) * limit : 0)
+        .sort({
+          [filter.column]: filter.type,
+        })
+        .limit(limit * 1);
+
+      return Product;
+    }
+
+    const Product = await productsModel.find(filter);
+    return Product;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.getSeachCatalog = async (idCatalog) => {
   try {
     var regex = new RegExp(idCatalog, "i");
