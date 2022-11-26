@@ -21,7 +21,7 @@ exports.getById = async (id) => {
 exports.getByEmail = async (Email) => {
   try {
     const customer = await customersModel.find({ email: Email });
-    if (customer) {
+    if (customer.length > 0) {
       return customer;
     }
     return false;
@@ -88,6 +88,30 @@ exports.Login = async (values) => {
 exports.update = async (id, values) => {
   return await customersModel
     .updateOne({ _id: id }, values)
+    .then(() => true)
+    .catch((error) => false);
+};
+
+module.exports.changePassword = async (id, values) => {
+  const bcrypt = require("bcrypt");
+  var salt = bcrypt.genSaltSync(10);
+
+  const user = await customersModel.findOne({ _id: id });
+  const password_db = user.password;
+  const password = values.password;
+  const newPass = values.newPassword;
+  const passwordCompared = bcrypt.compareSync(password, password_db);
+
+  if (!passwordCompared) {
+    console.log("wrong password");
+    return false;
+  }
+
+  const passwordHashed = bcrypt.hashSync(newPass, salt);
+  const newPassword = passwordHashed;
+
+  return await customersModel
+    .updateOne({ _id: id }, { password: newPassword })
     .then(() => true)
     .catch((error) => false);
 };

@@ -11,9 +11,11 @@ router.post(
   middlewareAuth.checkAuthencation,
   customersController.Logout
 );
-// REFRESH TOKEN
-router.post("/refresh", customersController.refreshToken);
 router.get("/:id", customersController.getCustomerById);
 router.get("/", customersController.getAll);
 router.post("/edit", customersController.changeInfor);
+// REFRESH TOKEN
+router.post("/refresh", customersController.refreshToken);
+router.post("/change-password", customersController.changePassword);
+router.post("/forgot-password", customersController.forgotpassword);
 module.exports = router;
