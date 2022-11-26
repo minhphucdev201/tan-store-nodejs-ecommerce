@@ -70,3 +70,23 @@ module.exports.delete = async (req, res, next) => {
     console.log(err);
   }
 };
+
+module.exports.checkCoupon = async (req, res, next) => {
+  try {
+    const filter = {
+      code: req.body.code,
+    };
+    const Coupon = await couponService.getAll(filter);
+    if (Coupon[0]) {
+      return res
+        .status(200)
+        .json({ code: "200", message: "sucsses", data: Coupon });
+    } else {
+      return res.status(404).json({ code: "404", message: "code not found" });
+    }
+
+    // res.status(404).json({code:"404",message:"fail"});
+  } catch (err) {
+    console.log(err);
+  }
+};
