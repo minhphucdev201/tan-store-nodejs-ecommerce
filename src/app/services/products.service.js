@@ -2,17 +2,12 @@ const productsModel = require("../models/products.model");
 
 exports.getAll = async (filter) => {
   try {
-    const { page = 1, limit = 3 } = filter;
     if (filter.hasOwnProperty("_sort")) {
-      const Product = await productsModel
+      const products = await productsModel
         .find(filter)
-        .skip(page > 0 ? (page - 1) * limit : 0)
-        .sort({
-          [filter.column]: filter.type,
-        })
-        .limit(limit * 1);
+        .sort({ [filter.column]: filter.type });
 
-      return Product;
+      return products;
     }
 
     const Product = await productsModel.find(filter);

@@ -89,7 +89,7 @@ exports.forgotpassword = async (req, res, next) => {
             secure: true,
             service: "gmail",
             auth: {
-              user: "minhphuc201.dev@gmail.com",
+              user: "minhphuc201@gmail.com",
               pass: "mxmdublvlqwkctlh",
             },
           });

@@ -8,7 +8,7 @@ router.post("/create", catalogsController.create);
 router.put("/:id", catalogsController.update);
 router.delete(
   "/del/:id",
-  middlewareAuth.checkRoleDelCata,
+  // middlewareAuth.checkRoleDelCata,
   catalogsController.delete
 );
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const productsController = require("../app/controllers/products.controller");
 
 // filter products
+router.get("/count", productsController.count);
 router.get("/searchName", productsController.SearchName);
 router.get("/slug/:slug", productsController.SearchBySlug);
 router.get("/idCata/:id", productsController.getByIdCata);

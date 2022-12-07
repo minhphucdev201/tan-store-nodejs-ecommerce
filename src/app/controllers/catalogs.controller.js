@@ -4,7 +4,7 @@ const productsModel = require("../models/products.model.js");
 
 module.exports.getAll = async (req, res) => {
   try {
-    const Catalogs = await CatalogService.getAll();
+    const Catalogs = await catalogsModel.find();
 
     return res
       .status(200)

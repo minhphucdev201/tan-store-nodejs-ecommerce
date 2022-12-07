@@ -9,6 +9,7 @@ const ProductSchema = new mongoose.Schema(
     thumbnail: [
       {
         imageUrl: { type: String },
+        img2: { type: String },
       },
     ],
     description: { type: String, required: true },

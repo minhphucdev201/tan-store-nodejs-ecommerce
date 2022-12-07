@@ -5,17 +5,37 @@ const catalogsModel = require("../models/catalogs.model");
 module.exports.getAll = async (req, res, next) => {
   try {
     const filter = req.query;
-    const Products = await productsService.getAll(filter);
-    return res
-      .status(200)
-      .json({
-        code: "200",
-        message: "sucsses",
-        total: Products.length,
-        data: Products,
-      });
+    const page = filter.page || 1;
+    const limit = filter.limit || 50;
+    const products = await productsModel
+      .find(filter)
+      .sort({ [filter.column]: filter.type })
+      .skip(page > 0 ? (page - 1) * limit : 0)
+      .populate("idCatalog")
+
+      .limit(limit * 1)
+      .exec();
+    const count = await productsModel.countDocuments();
+    return res.status(200).json({
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: count,
+      },
+      data: products,
+    });
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+};
+
+module.exports.count = async (req, res, next) => {
+  try {
+    const products = await productsModel.find({});
+    const count = await productsModel.find({}).count();
+    return res.status(200).json(count);
+  } catch (error) {
+    return res.status(500).json({ err: error });
   }
 };
 
