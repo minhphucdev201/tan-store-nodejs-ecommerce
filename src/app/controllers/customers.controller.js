@@ -184,19 +184,30 @@ exports.forgotpassword = async (req, res, next) => {
 exports.Register = async (req, res, next) => {
   try {
     const values = req.body;
+    var salt = bcrypt.genSaltSync(10);
+    const fullName = values.fullName;
+    const password = values.password;
+    const email = values.email;
 
-    // add Customer
-    const addCustomer = customersService.createNew(values);
-    if (addCustomer) {
+    const passwordHashed = bcrypt.hashSync(password, salt);
+    let newCustomer = new customersModel({
+      fullName,
+      email,
+      password: passwordHashed,
+    });
+    const user = await customersService.getByEmail(values.email);
+    if (user.length > 0) {
       return res
-        .status(200)
-        .json({ code: "200", message: "Add Customer success" });
+        .status(500)
+        .json({ code: 500, message: "Tài khoản đã tồn tại!!" });
     }
+    const savedProduct = await newCustomer.save();
+
     return res
-      .status(404)
-      .json({ code: "404", message: "Register Customer fail" });
+      .status(200)
+      .json({ code: "200", message: "Sucess", data: savedProduct });
   } catch (error) {
-    res.status(500).json({ error: error });
+    return res.status(404).json({ error: error });
   }
 };
 
@@ -205,14 +216,18 @@ exports.Login = async (req, res, next) => {
   try {
     const user = await customersModel.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(404).json({ code: "404", message: "Wrong Email!" });
+      return res
+        .status(404)
+        .json({ code: "404", message: "Email không đúng!" });
     }
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
     if (!validPassword) {
-      return res.status(404).json({ code: "404", message: "Wrong Password!" });
+      return res
+        .status(404)
+        .json({ code: "404", message: "Mật khẩu không đúng!" });
     }
     if (user && validPassword) {
       const accessToken = jwt.sign(
@@ -300,4 +315,16 @@ module.exports.Logout = async (req, res) => {
     (token) => token !== req.cookies.refreshToken
   );
   return res.status(200).json({ message: "Logged Out!" });
+};
+module.exports.deleteCustomer = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    await customersModel.findByIdAndDelete(id);
+    return res
+      .status(200)
+      .json({ code: "200", message: "Delete Successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 };

@@ -1,20 +1,26 @@
 const productsService = require("../services/products.service");
 const productsModel = require("../models/products.model");
 const catalogsModel = require("../models/catalogs.model");
+// const str = require("../../utils/index");
 // GET ALL PRODUCT
 module.exports.getAll = async (req, res, next) => {
   try {
     const filter = req.query;
-    const page = filter.page || 1;
-    const limit = filter.limit || 50;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 50;
+    const search = req.query.name;
+
     const products = await productsModel
       .find(filter)
-      .sort({ [filter.column]: filter.type })
+      .sort({ [req.query.column]: req.query.type })
       .skip(page > 0 ? (page - 1) * limit : 0)
+
       .populate("idCatalog")
 
       .limit(limit * 1)
       .exec();
+    // const ProductsSearch = await productsService.getSearchNameProduct(search);
+    // console.log(ProductsSearch);
     const count = await productsModel.countDocuments();
     return res.status(200).json({
       pagination: {

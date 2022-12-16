@@ -2,10 +2,30 @@ const blogsModel = require("../models/blogs.model");
 const blogsService = require("../services/blogs.service");
 module.exports.getAll = async (req, res, next) => {
   try {
-    const blog = await blogsModel.find();
-    return res
-      .status(200)
-      .json({ code: "200", message: "Successfully", data: blog });
+    const count = await blogsModel.countDocuments();
+    const filter = req.query;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || count;
+
+    const blogs = await blogsModel
+      .find(filter)
+      .sort({ [req.query.column]: req.query.type })
+      .skip(page > 0 ? (page - 1) * limit : 0)
+
+      .populate("idCatalogBlog")
+
+      .limit(limit * 1)
+      .exec();
+    // const ProductsSearch = await productsService.getSearchNameProduct(search);
+    // console.log(ProductsSearch);
+    return res.status(200).json({
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: count,
+      },
+      data: blogs,
+    });
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -14,7 +34,7 @@ module.exports.getAll = async (req, res, next) => {
 module.exports.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const blog = await blogsModel.findById(id);
+    const blog = await blogsModel.findById(id).populate("idCatalogBlog");
     return res
       .status(200)
       .json({ code: "200", message: "Find Blog successfully", data: blog });

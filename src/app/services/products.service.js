@@ -61,3 +61,16 @@ exports.getByIdCata = async (idCata) => {
     console.log(error);
   }
 };
+
+exports.getById = async (id) => {
+  try {
+    const Product = await productsModel.findById(id);
+    if (Product) {
+      return Product;
+    }
+    return false;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};

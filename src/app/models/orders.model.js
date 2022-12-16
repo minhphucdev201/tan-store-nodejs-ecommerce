@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const OrderSchema = new mongoose.Schema(
   {
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
-    fullname: { type: String, required: true },
+    fullName: { type: String, required: true },
     address: { type: Object, required: true },
     phone: { type: Number, required: true },
     email: { type: String, required: true },

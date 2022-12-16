@@ -12,6 +12,7 @@ const ProductSchema = new mongoose.Schema(
         img2: { type: String },
       },
     ],
+    images: [String],
     description: { type: String, required: true },
     shortDescription: { type: String },
     originalPrice: { type: Number, required: true },

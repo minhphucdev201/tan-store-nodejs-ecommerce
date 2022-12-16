@@ -43,13 +43,12 @@ exports.createNew = async (values) => {
     let newCustomer = new customersModel({
       fullName,
       email,
-      phone,
       password: passwordHashed,
     });
     return newCustomer
       .save()
       .then(() => {
-        console.log("Add Customer success!");
+        console.log("Add Customer success!", newCustomer);
         return true;
       })
       .catch((error) => {

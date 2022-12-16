@@ -14,6 +14,7 @@ router.post(
 router.get("/:id", customersController.getCustomerById);
 router.get("/", customersController.getAll);
 router.post("/edit", customersController.changeInfor);
+router.delete("/del/:id", customersController.deleteCustomer);
 // REFRESH TOKEN
 router.post("/refresh", customersController.refreshToken);
 router.post("/change-password", customersController.changePassword);
