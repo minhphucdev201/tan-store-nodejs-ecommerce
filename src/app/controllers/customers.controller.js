@@ -255,8 +255,7 @@ exports.Login = async (req, res, next) => {
       res.status(200).json({
         code: "200",
         message: "Successfully",
-        ...others,
-        accessToken,
+        data: { ...others, accessToken },
       });
     }
   } catch (error) {
