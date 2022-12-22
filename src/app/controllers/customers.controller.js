@@ -205,7 +205,7 @@ exports.Register = async (req, res, next) => {
 
     return res
       .status(200)
-      .json({ code: "200", message: "Sucess", data: savedProduct });
+      .json({ code: "200", message: "Sucess", user: savedProduct });
   } catch (error) {
     return res.status(404).json({ error: error });
   }
@@ -232,10 +232,10 @@ exports.Login = async (req, res, next) => {
     if (user && validPassword) {
       const accessToken = jwt.sign(
         {
-          id: user.id,
+          email: user.email,
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "30s" }
+        { expiresIn: "1d" }
       );
       const refreshToken = jwt.sign(
         {
@@ -255,7 +255,8 @@ exports.Login = async (req, res, next) => {
       res.status(200).json({
         code: "200",
         message: "Successfully",
-        data: { ...others, accessToken },
+        user: { ...others },
+        jwt: accessToken,
       });
     }
   } catch (error) {
