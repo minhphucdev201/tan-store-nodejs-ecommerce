@@ -2,10 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParse = require("cookie-parser");
-const route = require("./routes/index.route");
+const route = require("./src/routes/index.route");
 const app = express();
 const dotenv = require("dotenv");
-const db = require("./config/db");
+const db = require("./src/config/db");
 dotenv.config();
 //Conect DB
 
