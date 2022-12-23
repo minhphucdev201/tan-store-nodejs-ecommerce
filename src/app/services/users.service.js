@@ -107,3 +107,24 @@ module.exports.NewPass = async (id, password) => {
     .then(() => true)
     .catch((error) => false);
 };
+
+module.exports.updateUser = async (values) => {
+  const user = await usersModel.findOne({ _id: values.id });
+
+  if (!user) {
+    console.log("cannot find user to update");
+    return false;
+  }
+
+  return await usersModel
+    .updateOne(
+      { _id: values.id },
+      {
+        fullName: values.fullName,
+        email: values.email,
+        userName: values.userName,
+      }
+    )
+    .then(() => true)
+    .catch((error) => false);
+};

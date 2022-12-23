@@ -36,51 +36,53 @@ module.exports.NewOrder = async (req, res, next) => {
     console.log("customer id:", checkCustomer);
     if (!checkCustomer) {
       const Order = await ordersService.newOrder(value);
-      // if (Order) {
-      //   const orderId = Order._id;
-      //   await value.orderDetail.map(async (item) => {
-      //     const check = await productsService.getById(item.productId);
-      //     if (check) {
-      //       const newValue = {
-      //         productId: item.productId,
-      //         orderId,
-      //         customerId,
-      //         quantity: item.quantity,
-      //         price: item.price,
-      //       };
-      //       const order = await orderDetailsService.newOrder(newValue);
-      //       console.log(order);
-      //       return res
-      //         .status(200)
-      //         .json({ code: "200", message: "sucsses", data: order });
-      //     }
-      //   });
-      // }
+      if (Order) {
+        const orderId = Order._id;
+        await value.orderDetail.map(async (item) => {
+          const check = await productsService.getById(item.productId);
+          if (check) {
+            const newValue = {
+              productId: item.productId,
+              orderId,
+              customerId,
+              quantity: item.quantity,
+              price: item.price,
+            };
+            const order = await orderDetailsService.newOrder(newValue);
+            console.log(order);
+            return res
+              .status(200)
+              .json({ code: "200", message: "sucsses", data: order });
+          }
+        });
+      }
       return res
         .status(200)
         .json({ code: "200", message: "sucsses", data: Order });
     } else {
-      // const Order = await ordersService.newOrder(value);
-      // if (Order) {
-      //   const orderId = Order._id;
-      //   await value.orderDetail.map(async (item) => {
-      //     const check = await productsService.getById(item.productId);
-      //     if (check) {
-      //       const newValue = {
-      //         productId: item.productId,
-      //         orderId,
-      //         customerId,
-      //         quantity: item.quantity,
-      //         price: item.price,
-      //       };
-      //       const order = await orderDetailsService.newOrder(newValue);
-      //       console.log(order);
-      //       return res
-      //         .status(200)
-      //         .json({ code: "200", message: "sucsses", data: order });
-      //     }
-      //   });
-      // }
+      const Order = await ordersService.newOrder(value);
+      if (Order) {
+        const orderId = Order._id;
+        await value.orderDetail?.map(async (item) => {
+          console.log("vv");
+          // const check = await productsService.getById(item.productId);
+          // if (check) {
+          const newValue = {
+            productId: item.productId,
+            orderId,
+            customerId,
+            quantity: item.quantity,
+            price: item.price,
+          };
+          const total = newValue.quantity * newValue.price;
+          const order = await orderDetailsService.newOrder(newValue);
+          // console.log(order, total);
+          return res
+            .status(200)
+            .json({ code: "200", message: "sucsses", data: order });
+          // }
+        });
+      }
     }
   } catch (error) {
     console.log(error);

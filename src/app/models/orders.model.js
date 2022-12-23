@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema(
     email: { type: String, required: true },
     status: { type: Boolean, default: false },
     cancel: { type: Boolean, default: false },
+
     reason: { type: String },
     total: { type: Number },
     dateSend: { type: Date },

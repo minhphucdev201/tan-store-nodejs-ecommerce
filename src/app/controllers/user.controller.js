@@ -51,7 +51,7 @@ exports.Register = async (req, res, next) => {
   try {
     const values = req.body;
     // check username
-    const checkUsername = await usersService.getByUserName(values.username);
+    const checkUsername = await usersService.getByUserName(values.userName);
     if (checkUsername) {
       return res
         .status(404)
@@ -65,7 +65,7 @@ exports.Register = async (req, res, next) => {
         .json({ code: "404", message: "IdRole does not exist" });
     }
     // add Adimin
-    const addAdmin = usersService.createNew(values);
+    const addAdmin = await usersService.createNew(values);
     if (addAdmin) {
       return res
         .status(200)
@@ -341,4 +341,21 @@ module.exports.resetPassword = async (req, res, next) => {
         .json({ code: 401, message: "đổi mật khẩu thất bại" });
     }
   });
+};
+
+// Update user FullName / Email
+exports.updateUser = async (req, res, next) => {
+  try {
+    const values = req.body;
+    const change = await usersService.updateUser(values);
+    console.log(change);
+    if (change) {
+      return res.status(200).json({ code: "200", message: "Update success!" });
+    }
+    return res
+      .status(401)
+      .json({ code: "500", message: "Error when update user info" });
+  } catch (err) {
+    console.log(err);
+  }
 };
