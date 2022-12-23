@@ -2,13 +2,27 @@ const ordersService = require("../services/orders.service");
 const customersService = require("../services/customers.service");
 const productsService = require("../services/products.service.js");
 const orderDetailsService = require("../services/orderDetails.service");
+const ordersModel = require("../models/orders.model");
 module.exports.getAll = async (req, res, next) => {
   try {
+    const count = await ordersModel.countDocuments();
     const filter = req.query;
-    const Order = await ordersService.getAll(filter);
-    return res
-      .status(200)
-      .json({ code: "200", message: "Successfully", data: Order });
+    const page = req.query.page || 1;
+    const limit = req.query.limit || count;
+
+    const Order = await ordersModel
+      .find(filter)
+      .sort({ [req.query.column]: req.query.type })
+      .skip(page > 0 ? (page - 1) * limit : 0)
+      .limit(limit * 1);
+    return res.status(200).json({
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: count,
+      },
+      data: Order,
+    });
   } catch (error) {
     return res.status(500).json(error);
   }
