@@ -52,22 +52,22 @@ module.exports.NewOrder = async (req, res, next) => {
       const Order = await ordersService.newOrder(value);
       if (Order) {
         const orderId = Order._id;
-        await value.orderDetail.map(async (item) => {
-          const check = await productsService.getById(item.productId);
-          if (check) {
-            const newValue = {
-              productId: item.productId,
-              orderId,
-              customerId,
-              quantity: item.quantity,
-              price: item.price,
-            };
-            const order = await orderDetailsService.newOrder(newValue);
-            console.log(order);
-            return res
-              .status(200)
-              .json({ code: "200", message: "sucsses", data: order });
-          }
+        await value.orderDetail?.map(async (item) => {
+          // const check = await productsService.getById(item.productId);
+          // if (check) {
+          const newValue = {
+            productId: item.productId,
+            orderId,
+            customerId,
+            quantity: item.quantity,
+            price: item.price,
+          };
+          const order = await orderDetailsService.newOrder(newValue);
+          console.log(order);
+          return res
+            .status(200)
+            .json({ code: "200", message: "sucsses", data: order });
+          // }
         });
       }
       return res
