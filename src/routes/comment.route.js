@@ -15,7 +15,11 @@ router.put(
   //  middlewares.checkAuthencation,
   commentController.update
 );
-router.post("/create", middlewares.checkAuthencation, commentController.create);
+router.post(
+  "/create",
+  //  middlewares.checkAuthencation,
+  commentController.create
+);
 router.get("/:id", commentController.getByIdCata);
 router.get("/idProduct/:id", commentController.GetAllByIdProduct);
 router.get("/", commentController.getAll);
