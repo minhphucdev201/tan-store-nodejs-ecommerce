@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const rolesService = require("../services/roles.service");
 // verifyToken  and Admin auth
 // const middlewareAuth = {
-//   // verifyToken
+//    verifyToken
 //   checkAuthencation: (req, res, next) => {
 //     const token = req.headers.token;
 //     if (token) {
@@ -18,7 +18,7 @@ const rolesService = require("../services/roles.service");
 //       return res.status(401).json({ message: "You're not authenticated" });
 //     }
 //   },
-//   // verifyToken && verifyAdmin
+//   verifyToken && verifyAdmin
 //   checkAdmin: (req, res, next) => {
 //     middlewareAuth.checkAuthencation(req, res, () => {
 //       if (req.user.id == req.params.id || req.user.admin) {

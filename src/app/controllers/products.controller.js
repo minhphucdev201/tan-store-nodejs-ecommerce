@@ -9,7 +9,6 @@ module.exports.getAll = async (req, res, next) => {
     const page = req.query.page || 1;
     const limit = req.query.limit || 50;
     const search = req.query.name;
-
     const products = await productsModel
       .find(filter)
       .sort({ [req.query.column]: req.query.type })
@@ -19,8 +18,6 @@ module.exports.getAll = async (req, res, next) => {
 
       .limit(limit * 1)
       .exec();
-    // const ProductsSearch = await productsService.getSearchNameProduct(search);
-    // console.log(ProductsSearch);
     const count = await productsModel.countDocuments();
     return res.status(200).json({
       pagination: {
